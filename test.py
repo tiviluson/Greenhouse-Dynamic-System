@@ -1,4 +1,6 @@
+from functions_2b import *
+
 def Hello():
-  print("Hello world")
+  print(Calculate_MCExtAir(1, 2, 3))
 
 Hello();
