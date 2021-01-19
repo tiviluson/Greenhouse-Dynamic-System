@@ -1,2 +1,2 @@
 capCO2Air,capCO2Top,etaHeatCO2,uBlow,pBlow,aFlr,uExtCO2,phiExtCO2,uPad,phiPad,uThermalScreen,kThermalScreen,tAir,tTop,rhoMeanAir,g,rhoAirZero,rhoTop,rhoMean,L,SO,cD,cW,uRoof,uSide,aRoof,aSide,hSideRoof,tOut,tMeanAir,vWind,zetaInsectScreen,cLeakage,etaSide,etaSideThermal,uVentForced,phiVentForced,etaRoofThermal,etaRoof,hVent,mCH2O,P,R,cBuf,cMaxBuf,hElevation,mAir
-4.7,0.4,0.057,0.5,500000,780000,0.2,43000,0.5,16.7,0.5,0.00025,23,,,9.81,1.2,,,,,0.65,0.09,0.5,0.5,1800,0,3,,293.15,2.9,1,0.0001,,,,0,0.9,,0.97,30031,,1.59,,20000,1470,28.96
+4.7,0.4,0.057,0.5,500000,78000,0.2,43000,0.5,16.7,0.5,0.00025,23,,,9.81,1.2,,,,,0.65,0.09,0.5,0.5,1800,0,3,,293.15,2.9,1,0.0001,,,,0,0.9,,0.97,30031,,1.59,,20000,1470,28.96
