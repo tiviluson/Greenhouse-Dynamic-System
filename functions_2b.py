@@ -29,8 +29,11 @@ def Calculate_MCAirTop(fThermalScreen, CO2Air, CO2Top) :
     return fThermalScreen * (CO2Air - CO2Top)
 
 # Support Formula 7
-def Calculate_rhoAir(rhoAirZero, g, mAir, hElevation, R) :
-    return rhoAirZero * np.exp((g * mAir * hElevation) / (293.15 * R))
+def Calculate_rhoTop(rhoAirZero, g, mAir, hElevation, RGas):
+    return rhoAirZero * np.exp((g * mAir * (hElevation + 3)) / (293.15 * RGas))   # 3 is hVentRoof
+
+def Calculate_rhoAir(rhoAirZero, g, mAir, hElevation, RGas) :
+    return rhoAirZero * np.exp((g * mAir * hElevation) / (293.15 * RGas))
 
 # Formula 7
 def Calulate_fThermalScreen(uThermalScreen, kThermalScreen, tAir, tTop, g, rhoMeanAir, rhoAir, rhoTop) :
@@ -102,7 +105,7 @@ def Calculate_fVentRoof2Dot(cD, uRoof, aRoof, aFlr, g, hVent, tAir, tOut, tMeanA
 
 # Formula 18
 def Calculate_MCAirCan(mCH2O, hCBuf, P, R) :
-    return (mCH2O * hCBuf) * (P - R)
+    return mCH2O * hCBuf * (P - R)
 
 # Formula 19
 def Calculate_hCBuf(cBuf, cMaxBuf) :

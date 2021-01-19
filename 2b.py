@@ -1,11 +1,10 @@
-import csv
 import numpy as np
 import pandas as pd
 import functions_2b as eq
 
-CO2Air = 100
-CO2Top = 100
-CO2Out = 100
+CO2Air = 350
+CO2Top = 450
+CO2Out = 500
 
 CO2AirDot = None
 CO2TopDot = None
@@ -19,6 +18,7 @@ MCAirOut = None
 fVentRoofSide = None
 etaInsectScreen = None
 fLeakage = None
+fVentSide2Dot = None
 fVentSide = None
 fVentForced = None
 MCTopOut = None
@@ -28,7 +28,6 @@ MCAirCan = None
 hCBuf = None
 
 try:
-    df = pd.read_csv("environment.csv")
     cons = pd.read_csv("Constants.csv")
 except:
     print("Can't open file")
@@ -37,10 +36,11 @@ except:
 Constants = cons.to_dict('records')[0]
 
 def dx(Constants, CO2Air, CO2Top, CO2Out) :
-    rhoAir = eq.Calculate_rhoAir(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['R'])
+    rhoAir = eq.Calculate_rhoAir(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
+    rhoTop = eq.Calculate_rhoTop(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
 
     fThermalScreen = eq.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
-    , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, Constants['rhoTop'])\
+    , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
 
     phiCrack = eq.Calculate_phiCrack(Constants['L'], Constants['SO'], Constants['rhoMean'], Constants['g'], Constants['rhoTop'], rhoAir)
 
@@ -85,7 +85,6 @@ def dx(Constants, CO2Air, CO2Top, CO2Out) :
     print("MCPadAir:", MCPadAir, "- Formula 5")
     print("MCAirTop:", MCAirTop, "- Formula 6")
     print("fThermalScreen:", fThermalScreen, "- Formula 7")
-    print("phiCrack:", phiCrack, "- Formula 8")
     print("MCAirOut:", MCAirOut, "- Formula 9")
     print("fVentRoofSide:", fVentRoofSide, "- Formula 10")
     print("etaInsectScreen:", etaInsectScreen, "- Formula 11")
@@ -101,34 +100,3 @@ def dx(Constants, CO2Air, CO2Top, CO2Out) :
     return (CO2AirDot, CO2TopDot)
 
 dx(Constants, CO2Air, CO2Top, CO2Out)
-
-# data = df.to_numpy(na_value=-100).T[1:].T # Transfer the matrix data from pandas into numpy for easy calculations
-#
-# # Find out the unusable data (the ones with NaN) to avoid
-# unusableData = [0] * len(data)
-# for category in range(len(data.T)) :
-#     for sample in range(len(data)) :
-#         if np.isnan(data[sample][category]) :
-#             unusableData[sample] = 1
-#
-# # something = data.T[2] * 2
-# print(data)
-
-# CO2Air = data[2]
-# print(CO2Air)
-# print(type(CO2Air))
-# for row in data:
-#     print(row)
-# print(type(df))
-# print(data)
-# print(CO2Air)
-# for num in range(len(CO2Air)) :
-#     if np.isnan(CO2Air[num]) :
-#         print(CO2Air[num])
-# print(len(df["CO2air"]))
-# print(type(df["CO2air"]))
-# print(df["CO2air"])
-# num = pd.Series.to_numpy(df["CO2air"])
-# print(num)
-# print(type(num))
-# print(np.isnan(num[1]))
