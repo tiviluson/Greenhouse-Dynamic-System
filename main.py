@@ -10,7 +10,6 @@ MCExtAir = None
 MCPadAir = None
 MCAirTop = None
 fThermalScreen = None
-phiCrack = None
 MCAirOut = None
 fPad = None
 fVentRoofSide = None
@@ -69,7 +68,7 @@ def dx(init) :
     fThermalScreen = eq2b.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
     , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
 
-    phiCrack = eq2b.Calculate_phiCrack(Constants['L'], Constants['SO'], Constants['rhoMean'], Constants['g'], rhoTop, rhoAir)
+    #phiCrack = eq2b.Calculate_phiCrack(Constants['L'], Constants['SO'], Constants['rhoMean'], Constants['g'], rhoTop, rhoAir)
 
     fVentRoofSide = eq2b.Calculate_fVentRoofSide(Constants['cD'], Constants['aFlr'], Constants['uRoof']
     , Constants['uSide'], Constants['aRoof'], Constants['aSide'], Constants['g'], Constants['hSideRoof']
@@ -138,8 +137,6 @@ def dxVP(init) :
     fThermalScreen = eq2b.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
     , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
 
-    phiCrack = eq2b.Calculate_phiCrack(Constants['L'], Constants['SO'], Constants['rhoMean'], Constants['g'], rhoTop, rhoAir)
-
     fVentRoofSide = eq2b.Calculate_fVentRoofSide(Constants['cD'], Constants['aFlr'], Constants['uRoof']
     , Constants['uSide'], Constants['aRoof'], Constants['aSide'], Constants['g'], Constants['hSideRoof']
     , Constants['tAir'], Constants['tOut'], Constants['tMeanAir'], Constants['cW'], Constants['vWind'])
@@ -153,7 +150,7 @@ def dxVP(init) :
 
     fVentSide = eq2b.Calculate_fVentSide(etaInsectScreen, fVentSide2Dot, fLeakage, Constants['uThermalScreen'], fVentRoofSide, Constants['etaSide'], Constants['etaSideThermal'])
 
-    fVentForced = eq2b.Calculate_fVentForced(etaInsectScreen, Constants['uVentForced'], Constants['phiVentForced'], Constants['aFlr'])
+    # fVentForced = eq2b.Calculate_fVentForced(etaInsectScreen, Constants['uVentForced'], Constants['phiVentForced'], Constants['aFlr'])
 
     fVentRoof2Dot = eq2b.Calculate_fVentRoof2Dot(Constants['cD'], Constants['uRoof'], Constants['aRoof']
     , Constants['aFlr'], Constants['g'], Constants['hVent'], Constants['tAir'], Constants['tOut']
@@ -161,18 +158,18 @@ def dxVP(init) :
 
     fVentRoof = eq2b.Calculate_fVentRoof(etaInsectScreen, fVentRoof2Dot, fLeakage, Constants['uThermalScreen'], fVentRoofSide, Constants['etaSide'], Constants['etaRoof'], Constants['etaRoofThermal'])
 
-    hCBuf = eq2b.Calculate_hCBuf(Constants['cBuf'], Constants['cMaxBuf'])
+    # hCBuf = eq2b.Calculate_hCBuf(Constants['cBuf'], Constants['cMaxBuf'])
 
-    MCBlowAir = eq2b.Calculate_MCBlowAir(Constants['etaHeatCO2'], Constants['uBlow'], Constants['pBlow'], Constants['aFlr'])
-    MCExtAir = eq2b.Calculate_MCExtAir(Constants['uExtCO2'], Constants['phiExtCO2'], Constants['aFlr'])
-    MCPadAir = eq2b.Calculate_MCPadAir(Constants['uPad'], Constants['phiPad'], Constants['aFlr'], CO2Out, CO2Air)
-    MCAirTop = eq2b.Calculate_MCAirTop(fThermalScreen, CO2Air, CO2Top)
-    MCAirOut = eq2b.Calculate_MCAirOut(fVentSide, fVentForced, CO2Air, CO2Out)
-    MCTopOut = eq2b.Calculate_MCTopOut(fVentRoof, CO2Top, CO2Out)
-    MCAirCan = eq2b.Calculate_MCAirCan(Constants['mCH2O'], hCBuf, Constants['P'], Constants['R'])
-
-    CO2AirDot = eq2b.Calculate_CO2AirDot(MCBlowAir, MCExtAir, MCPadAir, MCAirCan, MCAirTop, MCAirOut, Constants['capCO2Air'])
-    CO2TopDot = eq2b.Calculate_CO2TopDot(MCAirTop, MCTopOut, Constants['capCO2Top'])
+    # MCBlowAir = eq2b.Calculate_MCBlowAir(Constants['etaHeatCO2'], Constants['uBlow'], Constants['pBlow'], Constants['aFlr'])
+    # MCExtAir = eq2b.Calculate_MCExtAir(Constants['uExtCO2'], Constants['phiExtCO2'], Constants['aFlr'])
+    # MCPadAir = eq2b.Calculate_MCPadAir(Constants['uPad'], Constants['phiPad'], Constants['aFlr'], CO2Out, CO2Air)
+    # MCAirTop = eq2b.Calculate_MCAirTop(fThermalScreen, CO2Air, CO2Top)
+    # MCAirOut = eq2b.Calculate_MCAirOut(fVentSide, fVentForced, CO2Air, CO2Out)
+    # MCTopOut = eq2b.Calculate_MCTopOut(fVentRoof, CO2Top, CO2Out)
+    # MCAirCan = eq2b.Calculate_MCAirCan(Constants['mCH2O'], hCBuf, Constants['P'], Constants['R'])
+    #
+    # CO2AirDot = eq2b.Calculate_CO2AirDot(MCBlowAir, MCExtAir, MCPadAir, MCAirCan, MCAirTop, MCAirOut, Constants['capCO2Air'])
+    # CO2TopDot = eq2b.Calculate_CO2TopDot(MCAirTop, MCTopOut, Constants['capCO2Top'])
 
     hBlowAir = eq5.Calculate_hBlowAir(Constants['HEC12'], Constants['tBlow'], Constants['tAir'])
 
