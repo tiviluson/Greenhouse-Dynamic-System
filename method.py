@@ -104,4 +104,4 @@ printSummary(method = "both", f = pointer["dx2"], h = 0.2, init = {"x": 0.5, "t"
 pointer = {}
 pointer["dx"] = dx
 init = {"t": 0, "Constants": Konstants, "CO2Air": CO2Air, "CO2Top": CO2Top, "CO2Out": CO2Out}
-printCO2(method = "both", f = pointer["dx"], h = 0.2, init = init, numberOfSteps = 5)
+printCO2(method = "both", f = pointer["dx"], h = 60, init = init, numberOfSteps = 5)
