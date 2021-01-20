@@ -77,12 +77,38 @@ def printCO2(method, f, h, init, numberOfSteps):
             print("Method: Explicit order-4 Runge–Kutta")
         print("n    t     CO2AirDot   CO2TopDot")
         for i in range(numberOfSteps + 1):
-            t = init["t"] + i*h
-            print("%d | %.2f | %.5f | %.5f" % (i, t, CO2Air, CO2Top))
+            if i % 1 == 0:
+                t = init["t"] + i*h
+                print("%d | %.2f | %.5f | %.5f" % (i, t/60, CO2Air, CO2Top))
             if method == "euler":
                 CO2Air, CO2Top = euler(f, h, {"t": t, "x": (CO2Air, CO2Top)})
+                VPAir, VPAir = euler(dxVP, h, {"t": t , "x": (VPAir, VPTop), "utils": {"CO2Air": CO2Air, "CO2Top": CO2Top}})
             elif method == "rk4":
                 CO2Air, CO2Top = rk4(f, h, {"t": t, "x": (CO2Air, CO2Top)})
+
+def printCO2(method, f, h, init, numberOfSteps):
+    CO2Air = init["CO2Air"]
+    CO2Top = init["CO2Top"]
+    if method == "both":
+        printCO2("euler", f, h, init, numberOfSteps)
+        printCO2("rk4", f, h, init, numberOfSteps)
+    else:
+        print("------------------------------------------")
+        if method == "euler":
+            print("Method: Explicit Euler")
+        elif method == "rk4":
+            print("Method: Explicit order-4 Runge–Kutta")
+        print("n    t     CO2AirDot   CO2TopDot")
+        for i in range(numberOfSteps + 1):
+            if i % 1 == 0:
+                t = init["t"] + i*h
+                print("%d | %.2f | %.5f | %.5f" % (i, t/60, CO2Air, CO2Top))
+            if method == "euler":
+                CO2Air, CO2Top = euler(f, h, {"t": t, "x": (CO2Air, CO2Top)})
+                #VPAir, VPAir = euler(dxVP, h, {"t": t , "x": (VPAir, VPTop), "utils": {"CO2Air": CO2Air, "CO2Top": CO2Top}})
+            elif method == "rk4":
+                CO2Air, CO2Top = rk4(f, h, {"t": t, "x": (CO2Air, CO2Top)})
+                #VPAir, VPAir = rk4(dxVP, h, {"t": t , "x": (VPAir, VPTop), "utils": {"CO2Air": CO2Air, "CO2Top": CO2Top}})
 
 '''
     Setup and test
@@ -103,5 +129,5 @@ printSummary(method = "both", f = pointer["dx2"], h = 0.2, init = {"x": 0.5, "t"
 
 pointer = {}
 pointer["dx"] = dx
-init = {"t": 0, "Constants": Konstants, "CO2Air": CO2Air, "CO2Top": CO2Top, "CO2Out": CO2Out}
-printCO2(method = "both", f = pointer["dx"], h = 0.2, init = init, numberOfSteps = 5)
+init = {"t": 0, "Constants": Konstants, "CO2Air": 375, "CO2Top": 375, "CO2Out": 375, "VPAir": 1600, "VPTop": 1300}
+printCO2(method = "both", f = pointer["dx"], h = 60, init = init, numberOfSteps = 25)
