@@ -59,7 +59,6 @@ except:
     quit()
 
 Constants = cons.to_dict('records')[0]
-#print(Constants)
 
 def dx(init) :
     CO2Air = init["x"][0]
@@ -72,8 +71,6 @@ def dx(init) :
 
     fThermalScreen = eq2b.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
     , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
-
-    #phiCrack = eq2b.Calculate_phiCrack(Constants['L'], Constants['SO'], Constants['rhoMean'], Constants['g'], rhoTop, rhoAir)
 
     fVentRoofSide = eq2b.Calculate_fVentRoofSide(Constants['cD'], Constants['aFlr'], Constants['uRoof']
     , Constants['uSide'], Constants['aRoof'], Constants['aSide'], Constants['g'], Constants['hSideRoof']
@@ -109,7 +106,7 @@ def dx(init) :
     CO2AirDot = eq2b.Calculate_CO2AirDot(MCBlowAir, MCExtAir, MCPadAir, MCAirCan, MCAirTop, MCAirOut, Constants['capCO2Air'])
     CO2TopDot = eq2b.Calculate_CO2TopDot(MCAirTop, MCTopOut, Constants['capCO2Top'])
 
-    '''
+
     print("CO2AirDot:", CO2AirDot, "- Formula 1")
     print("CO2TopDot:", CO2TopDot, "- Formula 2")
     print("MCBlowAir:", MCBlowAir, "- Formula 3")
@@ -128,7 +125,6 @@ def dx(init) :
     print("fVentRoof2Dot:", fVentRoof2Dot, "- Formula 17")
     print("MCAirCan:", MCAirCan, "- Formula 18")
     print("hCBuf:", hCBuf, "- Formula 19")
-    '''
 
     return (CO2AirDot, CO2TopDot)
 
@@ -140,7 +136,6 @@ def dxVP(init) :
     CO2Out = 500
 
     rhoAir = eq2b.Calculate_rhoAir(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
-    #print("rhoAir", rhoAir)
     rhoTop = eq2b.Calculate_rhoTop(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
     fPad = eq2b.Calculate_fPad(Constants['uPad'], Constants['phiPad'], Constants['aFlr'])
 
@@ -160,26 +155,11 @@ def dxVP(init) :
 
     fVentSide = eq2b.Calculate_fVentSide(etaInsectScreen, fVentSide2Dot, fLeakage, Constants['uThermalScreen'], fVentRoofSide, Constants['etaSide'], Constants['etaSideThermal'])
 
-    # fVentForced = eq2b.Calculate_fVentForced(etaInsectScreen, Constants['uVentForced'], Constants['phiVentForced'], Constants['aFlr'])
-
     fVentRoof2Dot = eq2b.Calculate_fVentRoof2Dot(Constants['cD'], Constants['uRoof'], Constants['aRoof']
     , Constants['aFlr'], Constants['g'], Constants['hVent'], Constants['tAir'], Constants['tOut']
     , Constants['tMeanAir'], Constants['cW'], Constants['vWind'])
 
     fVentRoof = eq2b.Calculate_fVentRoof(etaInsectScreen, fVentRoof2Dot, fLeakage, Constants['uThermalScreen'], fVentRoofSide, Constants['etaSide'], Constants['etaRoof'], Constants['etaRoofThermal'])
-
-    # hCBuf = eq2b.Calculate_hCBuf(Constants['cBuf'], Constants['cMaxBuf'])
-
-    # MCBlowAir = eq2b.Calculate_MCBlowAir(Constants['etaHeatCO2'], Constants['uBlow'], Constants['pBlow'], Constants['aFlr'])
-    # MCExtAir = eq2b.Calculate_MCExtAir(Constants['uExtCO2'], Constants['phiExtCO2'], Constants['aFlr'])
-    # MCPadAir = eq2b.Calculate_MCPadAir(Constants['uPad'], Constants['phiPad'], Constants['aFlr'], CO2Out, CO2Air)
-    # MCAirTop = eq2b.Calculate_MCAirTop(fThermalScreen, CO2Air, CO2Top)
-    # MCAirOut = eq2b.Calculate_MCAirOut(fVentSide, fVentForced, CO2Air, CO2Out)
-    # MCTopOut = eq2b.Calculate_MCTopOut(fVentRoof, CO2Top, CO2Out)
-    # MCAirCan = eq2b.Calculate_MCAirCan(Constants['mCH2O'], hCBuf, Constants['P'], Constants['R'])
-    #
-    # CO2AirDot = eq2b.Calculate_CO2AirDot(MCBlowAir, MCExtAir, MCPadAir, MCAirCan, MCAirTop, MCAirOut, Constants['capCO2Air'])
-    # CO2TopDot = eq2b.Calculate_CO2TopDot(MCAirTop, MCTopOut, Constants['capCO2Top'])
 
     hBlowAir = eq5.Calculate_hBlowAir(Constants['HEC12'], Constants['tBlow'], Constants['tAir'])
 
@@ -216,21 +196,20 @@ def dxVP(init) :
     VPAirDot = eq5.Calculate_VPAirDot(MVCanAir, MVPadAir, MVFogAir, MVBlowAir, MVAirThermalScreen, MVAirTop, MVAirOut, MVAirOutPad, MVAirMech, capVPAir)
     VPTopDot = eq5.Calculate_VPTopDot(MVAirTop, MVTopCoverInternal, MVTopOut, capVPTop)
 
-    # print(fPad)
-    # print(hBlowAir)
-    # print(capVPAir)
-    # print(capVPTop)
-    # print(MVFogAir)
-    # print(MVBlowAir)
-    # print(MVAirThermalScreen)
-    # print(MVAirTop)
-    # print(MVAirOut)
-    # print(MVAirOutPad)
-    # print(MVTopOut)
-    # print(MVTopCoverInternal)
-    # print(MVAirMech)
-    # print(VPAirDot)
-    # print(VPTopDot)
+    print("fPad:", fPad)
+    print("hBlowAir:", hBlowAir)
+    print("capVPAir:", capVPAir)
+    print("capVPTop:", capVPTop)
+    print("MVFogAir:", MVFogAir)
+    print("MVBlowAir:", MVBlowAir)
+    print("MVAirThermalScreen:", MVAirThermalScreen)
+    print("MVAirTop:", MVAirTop)
+    print("MVAirOut:", MVAirOut)
+    print("MVAirOutPad:", MVAirOutPad)
+    print("MVTopOut:", MVTopOut)
+    print("MVTopCoverInternal:", MVTopCoverInternal)
+    print("MVAirMech:", MVAirMech)
+    print("VPAirDot:", VPAirDot)
+    print("VPTopDot:", VPTopDot)
 
     return (VPAirDot, VPTopDot)
-#dx({"CO2Air": CO2Air, "CO2Top": CO2Top})

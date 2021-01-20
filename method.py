@@ -72,29 +72,6 @@ def printInfo(method, f, solution, h, init, numberOfSteps):
             elif method == "rk4":
                 x_n = rk4(f, h, {"t": t, "x": x_n})
 
-# def printCO2(method, f, h, init, numberOfSteps):
-#     CO2Air = init["CO2Air"]
-#     CO2Top = init["CO2Top"]
-#     if method == "both":
-#         printCO2("euler", f, h, init, numberOfSteps)
-#         printCO2("rk4", f, h, init, numberOfSteps)
-#     else:
-#         print("------------------------------------------")
-#         if method == "euler":
-#             print("Method: Explicit Euler")
-#         elif method == "rk4":
-#             print("Method: Explicit order-4 Runge–Kutta")
-#         print("n    t     CO2AirDot   CO2TopDot")
-#         for i in range(numberOfSteps + 1):
-#             if i % 1 == 0:
-#                 t = init["t"] + i*h
-#                 print("%d | %.2f | %.5f | %.5f" % (i, t/60, CO2Air, CO2Top))
-#             if method == "euler":
-#                 CO2Air, CO2Top = euler(f, h, {"t": t, "x": (CO2Air, CO2Top)})
-#                 VPAir, VPAir = euler(dxVP, h, {"t": t , "x": (VPAir, VPTop), "utils": {"CO2Air": CO2Air, "CO2Top": CO2Top}})
-#             elif method == "rk4":
-#                 CO2Air, CO2Top = rk4(f, h, {"t": t, "x": (CO2Air, CO2Top)})
-
 def printCO2(method, f, h, init, numberOfSteps):
     CO2Air = init["CO2Air"]
     CO2Top = init["CO2Top"]
