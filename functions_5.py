@@ -66,7 +66,7 @@ def Calculate_VECCanAir(rhoAir, cPAir, LAI, deltaH, gamma, rB, rS) :
     return (2 * rhoAir * cPAir * LAI) / (deltaH * gamma * (rB + rS))
 
 def Calculate_rS(rSMin, rfFRCan, rfCO2AirPpm, rfVPCanMinusVPAir) :
-    return rSMin * rfFRCan * rfCPAir * rfVPCanMinusVPAir
+    return rSMin * rfFRCan * rfCO2AirPpm * rfVPCanMinusVPAir
 
 def Calculate_rfFRCan(rCan, cEvap1, cEvap2) :
     return (rCan + cEvap1) / (rCan + cEvap2)

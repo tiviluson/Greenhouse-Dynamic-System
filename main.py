@@ -23,6 +23,8 @@ fVentRoof = None
 fVentRoof2Dot = None
 MCAirCan = None
 hCBuf = None
+rhoAir = None
+rhoTop = None
 
 hBlowAir = None
 capVPAir = None
@@ -57,6 +59,7 @@ except:
     quit()
 
 Constants = cons.to_dict('records')[0]
+#print(Constants)
 
 def dx(init) :
     CO2Air = init["x"][0]
@@ -64,6 +67,8 @@ def dx(init) :
     CO2Out = 500
     rhoAir = eq2b.Calculate_rhoAir(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
     rhoTop = eq2b.Calculate_rhoTop(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
+
+    fPad = eq2b.Calculate_fPad(Constants['uPad'], Constants['phiPad'], Constants['aFlr'])
 
     fThermalScreen = eq2b.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
     , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
@@ -128,11 +133,16 @@ def dx(init) :
     return (CO2AirDot, CO2TopDot)
 
 def dxVP(init) :
-    CO2Air = init["x"][0]
-    CO2Top = init["x"][1]
+    VPAir = init["x"][0]
+    VPTop = init["x"][1]
+    CO2Air = init["utils"]["CO2Air"]
+    CO2Top = init["utils"]["CO2Top"]
     CO2Out = 500
+
     rhoAir = eq2b.Calculate_rhoAir(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
+    #print("rhoAir", rhoAir)
     rhoTop = eq2b.Calculate_rhoTop(Constants['rhoAirZero'], Constants['g'], Constants['mAir'], Constants['hElevation'], Constants['RGas'])
+    fPad = eq2b.Calculate_fPad(Constants['uPad'], Constants['phiPad'], Constants['aFlr'])
 
     fThermalScreen = eq2b.Calulate_fThermalScreen(Constants['uThermalScreen'], Constants['kThermalScreen']
     , Constants['tAir'], Constants['tTop'], Constants['g'], Constants['rhoMeanAir'], rhoAir, rhoTop)
@@ -185,42 +195,42 @@ def dxVP(init) :
 
     cEvap4 = eq5.Calculate_cEvap4(Constants['cDayEvap4'], Constants['sRS'], Constants['cNightEvap4'])
 
-    rfVPCanMinusVPAir = eq5.Calculate_rfVPCanMinusVPAir(cEvap4, Constants['VPCan'], Constants['VPAir'])
+    rfVPCanMinusVPAir = eq5.Calculate_rfVPCanMinusVPAir(cEvap4, Constants['VPCan'], VPAir)
 
-    rS = eq5.Calculate_rS(Constants['rsMin'], rfFRCan, rfCO2AirPpm, rfVPCanMinusVPAir)
+    rS = eq5.Calculate_rS(Constants['rSMin'], rfFRCan, rfCO2AirPpm, rfVPCanMinusVPAir)
 
     VECCanAir = eq5.Calculate_VECCanAir(rhoAir, Constants['cPAir'], Constants['LAI'], Constants['deltaH'], Constants['gamma'], Constants['rB'], rS)
 
-    MVCanAir = eq5.Calculate_MVCanAir(VECCanAir, Constants['VPCan'], Constants['VPAir'])
+    MVCanAir = eq5.Calculate_MVCanAir(VECCanAir, Constants['VPCan'], VPAir)
     MVPadAir = eq5.Calculate_MVPadAir(rhoAir, fPad, Constants['etaPad'], Constants['xPad'], Constants['xOut'])
     MVFogAir = eq5.Calculate_MVFogAir(Constants['uFog'], Constants['phiFog'], Constants['aFlr'])
     MVBlowAir = eq5.Calculate_MVBlowAir(Constants['etaHeatVap'], hBlowAir)
-    MVAirThermalScreen = eq5.Calculate_MVAirThermalScreen(Constants['sMV12'], Constants['HEC12'], Constants['VPAir'], Constants['VPThermalScreen'])
-    MVAirTop = eq5.Calculate_MVAirTop(Constants['mWater'], Constants['RGas'], fThermalScreen, Constants['VPAir'], Constants['VPTop'], Constants['tAir'], Constants['tTop'])
-    MVAirOut = eq5.Calculate_MVAirOut(Constants['mWater'], Constants['RGas'], fVentSide, Constants['VPAir'], Constants['VPOut'], Constants['tAir'], Constants['tOut'])
-    MVAirOutPad = eq5.Calculate_MVAirOutPad(fpad, Constants['mWater'], Constants['RGas'], Constants['VPAir'], Constants['tAir'])
-    MVTopOut = eq5.Calculate_MVTopOut(Constants['mWater'], Constants['RGas'], fVentRoof, Constants['VPTop'], Constants['VPOut'], Constants['tTop'], Constants['tOut'])
-    MVTopCoverInternal = eq5.Calculate_MVTopCoverInternal(Constants['sMV12'], Constants['HEC12'], Constants['VPTop'], Constants['VPCoverInternal'])
-    MVAirMech = eq5.Calculate_MVAirMech(Constants['sMV12'], Constants['HEC12'], Constants['VPAir'], Constants['VPMech'])
+    MVAirThermalScreen = eq5.Calculate_MVAirThermalScreen(Constants['sMV12'], Constants['HEC12'], VPAir, Constants['VPThermalScreen'])
+    MVAirTop = eq5.Calculate_MVAirTop(Constants['mWater'], Constants['RGas'], fThermalScreen, VPAir, VPTop, Constants['tAir'], Constants['tTop'])
+    MVAirOut = eq5.Calculate_MVAirOut(Constants['mWater'], Constants['RGas'], fVentSide, VPAir, Constants['VPOut'], Constants['tAir'], Constants['tOut'])
+    MVAirOutPad = eq5.Calculate_MVAirOutPad(fPad, Constants['mWater'], Constants['RGas'], VPAir, Constants['tAir'])
+    MVTopOut = eq5.Calculate_MVTopOut(Constants['mWater'], Constants['RGas'], fVentRoof, VPTop, Constants['VPOut'], Constants['tTop'], Constants['tOut'])
+    MVTopCoverInternal = eq5.Calculate_MVTopCoverInternal(Constants['sMV12'], Constants['HEC12'], VPTop, Constants['VPCoverInternal'])
+    MVAirMech = eq5.Calculate_MVAirMech(Constants['sMV12'], Constants['HEC12'], VPAir, Constants['VPMech'])
 
     VPAirDot = eq5.Calculate_VPAirDot(MVCanAir, MVPadAir, MVFogAir, MVBlowAir, MVAirThermalScreen, MVAirTop, MVAirOut, MVAirOutPad, MVAirMech, capVPAir)
     VPTopDot = eq5.Calculate_VPTopDot(MVAirTop, MVTopCoverInternal, MVTopOut, capVPTop)
 
-    print(fPad)
-    print(hBlowAir)
-    print(capVPAir)
-    print(capVPTop)
-    print(MVFogAir)
-    print(MVBlowAir)
-    print(MVAirThermalScreen)
-    print(MVAirTop)
-    print(MVAirOut)
-    print(MVAirOutPad)
-    print(MVTopOut)
-    print(MVTopCoverInternal)
-    print(MVAirMech)
-    print(VPAirDot)
-    print(VPTopDot)
+    # print(fPad)
+    # print(hBlowAir)
+    # print(capVPAir)
+    # print(capVPTop)
+    # print(MVFogAir)
+    # print(MVBlowAir)
+    # print(MVAirThermalScreen)
+    # print(MVAirTop)
+    # print(MVAirOut)
+    # print(MVAirOutPad)
+    # print(MVTopOut)
+    # print(MVTopCoverInternal)
+    # print(MVAirMech)
+    # print(VPAirDot)
+    # print(VPTopDot)
 
     return (VPAirDot, VPTopDot)
 #dx({"CO2Air": CO2Air, "CO2Top": CO2Top})
